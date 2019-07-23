@@ -48,7 +48,7 @@ export default class TradeTable extends React.Component {
                 tx['base_amount'] = Number(tx['price'] * tx['quantity']).toFixed(3);
                 tx['quantity'] = Number(tx['quantity']).toFixed(3);
                 if (tx['timestamp']) {
-                  tx['timestamp'] = new Date(tx['timestamp'] * 1000).toISOString();
+                  tx['timestamp'] = new Date(tx['timestamp'] * 1000).toLocaleString();
                 }
                 return tx;
               })

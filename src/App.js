@@ -13,13 +13,16 @@ function App({ location }) {
       accessor: 'account'
     }, {
       Header: 'Price (Steem)',
-      accessor: 'price',
+      accessor: 'price'
     }, {
       Header: `${token} Amount`,
       accessor: 'quantity'
     }, {
       Header: "Steem Amount",
       accessor: 'base_amount'
+    }, {
+      Header: "Date",
+      accessor: "timestamp"
     }];
 
   const history_columns = [{
