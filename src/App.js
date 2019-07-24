@@ -7,9 +7,19 @@ import RichListTable from './RichListTable';
 
 const APP_NAME = "lens";
 
-const Header = ({ location }) => {
+const App = ({ location }) => {
   const params = new URLSearchParams(location.search);
-  const token = params.get("token");
+  const token = params.get("token") || "ENG";
+  const page = params.get("page") || "open_order";
+
+  const body = () => {
+    switch(page) {
+      case "open_order": return OpenOrder({token});
+      case "trade_history": return TradeHistory({token});
+      case "rich_list": return RichList({token});
+      default: return null;
+    }
+  }
 
   return (
     <div>
@@ -25,20 +35,18 @@ const Header = ({ location }) => {
           {' Lens' }
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Link className="nav-link" to={`/${APP_NAME}/open_order?token=${token}`}>Open Orders</Link>
-          <Link className="nav-link" to={`/${APP_NAME}/trade_history?token=${token}`}>Trade History</Link>
-          <Link className="nav-link" to={`/${APP_NAME}/rich_list?token=${token}`}>Rich List</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=open_order&token=${token}`}>Open Orders</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=trade_history&token=${token}`}>Trade History</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=rich_list&token=${token}`}>Rich List</Link>
         </Nav>
       </Navbar>
       <br />
+      { body() }
     </div>
   );
 }
 
-const OpenOrder = ({ location }) => {
-  const params = new URLSearchParams(location.search);
-  const token = params.get("token");
-
+const OpenOrder = ({token}) => {
   return ( <Container>
     <Row>
       <Col>
@@ -53,10 +61,7 @@ const OpenOrder = ({ location }) => {
   </Container> );
 }
 
-const TradeHistory = ({ location }) => {
-  const params = new URLSearchParams(location.search);
-  const token = params.get("token");
-
+const TradeHistory = ({token}) => {
   return ( <Container>
     <Row>
       <Col>
@@ -72,10 +77,7 @@ const TradeHistory = ({ location }) => {
   </Container> );
 }
 
-const RichList = ({ location }) => {
-  const params = new URLSearchParams(location.search);
-  const token = params.get("token");
-
+const RichList = ({token}) => {
   return ( <Container>
     <Row>
       <Col>
@@ -90,11 +92,8 @@ const RichList = ({ location }) => {
 function AppRouter() {
   return (
     <Router>
-      <Route component={Header}/>
-      <Route path={`/${APP_NAME}`} exact component={OpenOrder} />
-      <Route path={`/${APP_NAME}/open_order`} component={OpenOrder} />
-      <Route path={`/${APP_NAME}/trade_history`} component={TradeHistory} />
-      <Route path={`/${APP_NAME}/rich_list`} component={RichList} />
+      <Route path="/" component={App}/>
+      <Route path={`/${APP_NAME}`} component={App}/>
     </Router>
   );
 }
