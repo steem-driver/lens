@@ -12,14 +12,15 @@ const App = ({ location }) => {
   const token = params.get("token") || "ENG";
   const page = params.get("page") || "open_order";
 
-  const body = () => {
+  const selectBody = () => {
     switch(page) {
-      case "open_order": return OpenOrder({token});
-      case "trade_history": return TradeHistory({token});
-      case "rich_list": return RichList({token});
+      case "open_order": return OpenOrder;
+      case "trade_history": return TradeHistory;
+      case "rich_list": return RichList;
       default: return null;
     }
-  }
+  };
+  const Body = selectBody();
 
   return (
     <div>
@@ -41,7 +42,8 @@ const App = ({ location }) => {
         </Nav>
       </Navbar>
       <br />
-      { body() }
+
+      <Body token={token} />
     </div>
   );
 }
@@ -92,7 +94,6 @@ const RichList = ({token}) => {
 function AppRouter() {
   return (
     <Router>
-      <Route path="/" component={App}/>
       <Route path={`/${APP_NAME}`} component={App}/>
     </Router>
   );
