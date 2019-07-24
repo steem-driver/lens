@@ -62,6 +62,7 @@ const TradeHistory = ({ location }) => {
       <Col>
         <h3>{token} Trade History</h3>
         <TradeTable token={token} table="tradesHistory" index="timestamp" descending={false} />
+        <br /> <br />
       </Col>
       <Col>
         <h3>{token} Trade History with Buyers and Sellers</h3>

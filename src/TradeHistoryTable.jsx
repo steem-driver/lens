@@ -19,6 +19,7 @@ export default class TradeHistoryTable extends React.Component {
 
   render() {
     return <ReactTable
+      className="-highlight -striped"
       columns={this.columns()}
       data={this.state.data} // should default to []
       pageSize={20}

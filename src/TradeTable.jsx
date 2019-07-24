@@ -19,6 +19,7 @@ export default class TradeTable extends React.Component {
 
   render() {
     return <ReactTable
+      className="-highlight -striped"
       columns={this.columns()}
       data={this.state.data} // should default to []
       pageSize={20}
@@ -37,12 +38,12 @@ export default class TradeTable extends React.Component {
   columns() {
     const { token, table } = this.props;
 
-    const order_columns = [{
+    const buy_order_columns = [{
+      Header: "Date",
+      accessor: "timestamp"
+    }, {
       Header: 'Account',
       accessor: 'account'
-    }, {
-      Header: 'Price (Steem)',
-      accessor: 'price'
     }, {
       Header: `${token} Amount`,
       accessor: 'quantity'
@@ -50,11 +51,28 @@ export default class TradeTable extends React.Component {
       Header: "Steem Amount",
       accessor: 'volume'
     }, {
+      Header: 'Price (Steem)',
+      accessor: 'price'
+    }];
+
+    const sell_order_columns = [{
+      Header: 'Price (Steem)',
+      accessor: 'price'
+    }, {
+      Header: "Steem Amount",
+      accessor: 'volume'
+    }, {
+      Header: `${token} Amount`,
+      accessor: 'quantity'
+    }, {
+      Header: 'Account',
+      accessor: 'account'
+    }, {
       Header: "Date",
       accessor: "timestamp"
     }];
 
-  const history_columns = [{
+    const history_columns = [{
       Header: 'Type',
       accessor: 'type'
     }, {
@@ -73,8 +91,12 @@ export default class TradeTable extends React.Component {
 
     if (table === "tradesHistory")
       return history_columns;
+    else if (table === "buyBook")
+      return buy_order_columns;
+    else if (table === "sellBook")
+      return sell_order_columns;
     else
-      return order_columns;
+      return null;
   }
 
   fetchData() {
