@@ -29,7 +29,7 @@ export default class TradeHistoryTable extends React.Component {
         if (state.data.length === 0) {
           // show the loading overlay
           this.setState({loading: true});
-          this.fetchData(state, instance);
+          this.fetchData(1);
         }
       }}
     />
@@ -62,33 +62,36 @@ export default class TradeHistoryTable extends React.Component {
     }];
   }
 
-  fetchData(state, instance) {
+  fetchData(page) {
     const { token } = this.props;
     const contract = "market";
-    const pageSize = 1000;
-    const page = 1;
+    const pageSize = 500;
     const url = `https://steem-engine.rocks/transactions.json?symbol=${token}&contract=${contract}&per_page=${pageSize}&page=${page}`;
 
     // fetch your data
     axios.get(`${cors_proxy}${url}`)
       .then((res) => {
         if (res && res.data && res.data.transactions) {
-          let result = [];
-          for (let tx of res.data.transactions) {
-            const rows = this.buildRows(tx);
-            if (rows != null) {
-              if (rows.length > 0) {
-                result = result.concat(rows);
-              } else {
-                result.push(rows);
+          if (res.data.transactions.length > 0) {
+            this.fetchData(page+1);
+            let result = [];
+            for (let tx of res.data.transactions) {
+              const rows = this.buildRows(tx);
+              if (rows != null) {
+                if (rows.length > 0) {
+                  result = result.concat(rows);
+                } else {
+                  result.push(rows);
+                }
               }
             }
+            const data = this.state.data.concat(result);
+            // update table
+            this.setState({
+              data: data,
+              loading: false
+            })
           }
-          // update table
-          this.setState({
-            data: result,
-            loading: false
-          })
         }
       })
   }
