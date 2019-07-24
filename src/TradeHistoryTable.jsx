@@ -110,14 +110,14 @@ export default class TradeHistoryTable extends React.Component {
       // row['volume'] = Number(row['price'] * row['quantity']).toFixed(3)
       let rows = [];
       for (let index = 0 ; index + 1 < transactions.length; index += 2) {
-        console.log("transaction", transactions[index], transactions[index+1]);
+        // console.log("transaction", transactions[index], transactions[index+1]);
         const sender = tx['sender'];
         const { receiver, quantity, volume } = this.getTradeInfo(sender, token, [transactions[index], transactions[index+1]]);
 
         const row = {
           type: tx['action'],
           timestamp: new Date(tx['timestamp']).toLocaleString(),
-          price: volume / quantity,
+          price: Number(volume / quantity).toFixed(8),
           quantity: Number(quantity).toFixed(3),
           volume: Number(volume).toFixed(3)
         }
@@ -130,7 +130,6 @@ export default class TradeHistoryTable extends React.Component {
           row['buyer'] = receiver;
         }
 
-        console.log('row', row);
         rows.push(row);
       }
       return rows;

@@ -21,7 +21,7 @@ export default class TradeTable extends React.Component {
     return <ReactTable
       columns={this.columns()}
       data={this.state.data} // should default to []
-      pageSize={50}
+      pageSize={20}
       loading={this.state.loading}
       // manual // informs React Table that you'll be handling sorting and pagination server-side
       onFetchData={(state, instance) => {
