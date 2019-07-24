@@ -117,9 +117,9 @@ export default class TradeHistoryTable extends React.Component {
         const row = {
           type: tx['action'],
           timestamp: new Date(tx['timestamp']).toLocaleString(),
-          price: Number(volume / quantity).toFixed(8),
-          quantity: Number(quantity).toFixed(3),
-          volume: Number(volume).toFixed(3)
+          price: Number(Number(volume / quantity).toFixed(8)),
+          quantity: Number(Number(quantity).toFixed(3)),
+          volume: Number(Number(volume).toFixed(3))
         }
 
         if (row['type'] === "buy") {

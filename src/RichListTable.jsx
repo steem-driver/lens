@@ -36,8 +36,14 @@ export default class RichList extends React.Component {
 
   columns() {
     return [{
-        Header: "Rank",
-        accessor: "rank"
+        Header: "#",
+        id: "row",
+        maxWidth: 50,
+        filterable: false,
+        sortable: false,
+        Cell: (row) => {
+          return <div>{row.page * row.pageSize + row.viewIndex + 1}</div>;
+        }
       },{
         Header: "Account",
         accessor: "account"
@@ -91,6 +97,10 @@ export default class RichList extends React.Component {
             this.fetchData(offset + limit);
 
             const result = res.data.result.map(tx => {
+              for (let key of ["balance", "stake", "pendingUnstake", "delegationsIn", "delegationsOut"]) {
+                if (typeof tx[key] !== typeof undefined && tx[key] != null)
+                  tx[key] = Number(tx[key])
+              }
               tx['delegationsIn'] = tx['delegationsIn'] || tx['receivedStake'] || 0;
               tx['delegationsOut'] = tx['delegationsOut'] || tx['delegatedStake'] || 0;
               tx['effectiveStake'] = Number(tx['stake']) + Number(tx['delegationsIn']);
@@ -100,13 +110,6 @@ export default class RichList extends React.Component {
             const order = descending ? -1 : 1;
             let data = this.state.data.concat(result);
             data.sort((a, b) => ((a[index] - b[index]) * order));
-
-            // add rank
-            let count = 1;
-            data.map(row => {
-              row['rank'] = count;
-              count ++;
-            });
 
             // update table
             this.setState({

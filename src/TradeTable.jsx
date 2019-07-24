@@ -98,11 +98,15 @@ export default class TradeTable extends React.Component {
       .then((res) => {
         if (res && res.data && res.data.result) {
           const result = res.data.result.map(tx => {
+            for (let key of ["quantity", "price"]) {
+              if (typeof tx[key] !== typeof undefined && tx[key] != null)
+                tx[key] = Number(tx[key])
+            }
             if (!tx['volume']) {
                tx['volume'] = Number(tx['price'] * tx['quantity'])
             }
-            tx['volume'] = Number(tx['volume']).toFixed(3);
-            tx['quantity'] = Number(tx['quantity']).toFixed(3);
+            tx['volume'] = Number(Number(tx['volume']).toFixed(3));
+            tx['quantity'] = Number(Number(tx['quantity']).toFixed(3));
             if (tx['timestamp']) {
               tx['timestamp'] = new Date(tx['timestamp'] * 1000).toLocaleString();
             }
