@@ -5,6 +5,7 @@ import TradeTable from './TradeTable';
 import TradeHistoryTable from './TradeHistoryTable';
 import RichListTable from './RichListTable';
 
+const APP_NAME = "lens";
 
 const Header = ({ location }) => {
   const params = new URLSearchParams(location.search);
@@ -24,9 +25,9 @@ const Header = ({ location }) => {
           {' Lens' }
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Link className="nav-link" to={`/open_order?token=${token}`}>Open Orders</Link>
-          <Link className="nav-link" to={`/trade_history?token=${token}`}>Trade History</Link>
-          <Link className="nav-link" to={`/rich_list?token=${token}`}>Rich List</Link>
+          <Link className="nav-link" to={`/${APP_NAME}/open_order?token=${token}`}>Open Orders</Link>
+          <Link className="nav-link" to={`/${APP_NAME}/trade_history?token=${token}`}>Trade History</Link>
+          <Link className="nav-link" to={`/${APP_NAME}/rich_list?token=${token}`}>Rich List</Link>
         </Nav>
       </Navbar>
       <br />
@@ -89,10 +90,10 @@ function AppRouter() {
   return (
     <Router>
       <Route component={Header}/>
-      <Route path="/" exact component={OpenOrder} />
-      <Route path="/open_order" component={OpenOrder} />
-      <Route path="/trade_history" component={TradeHistory} />
-      <Route path="/rich_list" component={RichList} />
+      <Route path={`/${APP_NAME}`} exact component={OpenOrder} />
+      <Route path={`/${APP_NAME}/open_order`} component={OpenOrder} />
+      <Route path={`/${APP_NAME}/trade_history`} component={TradeHistory} />
+      <Route path={`/${APP_NAME}/rich_list`} component={RichList} />
     </Router>
   );
 }
