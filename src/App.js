@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap';
 import TradeTable from './TradeTable';
 import TradeHistoryTable from './TradeHistoryTable';
+import RichListTable from './RichListTable';
 
 
 const Header = ({ location }) => {
@@ -25,6 +26,7 @@ const Header = ({ location }) => {
         <Nav className="mr-auto">
           <Link className="nav-link" to={`/open_order?token=${token}`}>Open Orders</Link>
           <Link className="nav-link" to={`/trade_history?token=${token}`}>Trade History</Link>
+          <Link className="nav-link" to={`/rich_list?token=${token}`}>Rich List</Link>
         </Nav>
       </Navbar>
       <br />
@@ -68,6 +70,21 @@ const TradeHistory = ({ location }) => {
   </Container> );
 }
 
+const RichList = ({ location }) => {
+  const params = new URLSearchParams(location.search);
+  const token = params.get("token");
+
+  return ( <Container>
+    <Row>
+      <Col>
+        <h3>{token} Rich List</h3>
+        <RichListTable token={token} index="effectiveStake" descending={true}/>
+      </Col>
+    </Row>
+  </Container> );
+}
+
+
 function AppRouter() {
   return (
     <Router>
@@ -75,6 +92,7 @@ function AppRouter() {
       <Route path="/" exact component={OpenOrder} />
       <Route path="/open_order" component={OpenOrder} />
       <Route path="/trade_history" component={TradeHistory} />
+      <Route path="/rich_list" component={RichList} />
     </Router>
   );
 }
