@@ -25,10 +25,11 @@ export default class TradeTable extends React.Component {
       loading={this.state.loading}
       // manual // informs React Table that you'll be handling sorting and pagination server-side
       onFetchData={(state, instance) => {
-        // show the loading overlay
-        this.setState({loading: true});
-        this.fetchData();
-
+        if (state.data.length === 0) {
+          // show the loading overlay
+          this.setState({loading: true});
+          this.fetchData();
+        }
       }}
     />
   }
@@ -95,9 +96,6 @@ export default class TradeTable extends React.Component {
       }
     })
       .then((res) => {
-        if (table === "tradesHistory") {
-          console.log(res);
-        }
         if (res && res.data && res.data.result) {
           const result = res.data.result.map(tx => {
             if (!tx['volume']) {
