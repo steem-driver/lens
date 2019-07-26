@@ -28,7 +28,7 @@ const App = ({ location }) => {
         <Navbar.Brand>
           <img
             alt=""
-            src="/favicon.ico"
+            src={`${process.env.PUBLIC_URL}/favicon.ico`}
             width="30"
             height="30"
             className="d-inline-block align-top"
