@@ -5938,6 +5938,11 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
+ldoash@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.npm.taobao.org/ldoash/download/ldoash-0.0.1-security.tgz#80ba815f85b5c283d0406f4a5435a98123d74bed"
+  integrity sha1-gLqBX4W1woPQQG9KVDWpgSPXS+0=
+
 left-pad@^1.3.0:
   version "1.3.0"
   resolved "https://registry.npm.taobao.org/left-pad/download/left-pad-1.3.0.tgz#5b8a3a7765dfe001261dde915589e782f8c94d1e"

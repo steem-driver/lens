@@ -3,8 +3,11 @@ import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 // import { NumberRangeColumnFilter } from './Filter'
+import { Sum, Count } from './Footer'
 
 const url = "https://api.steem-engine.com/rpc/contracts";
+
+const column = (data, index) => data.map(row => row[index])
 
 export default class RichList extends React.Component {
 
@@ -38,6 +41,8 @@ export default class RichList extends React.Component {
   }
 
   columns() {
+    const { data } = this.state;
+
     return [{
         Header: "#",
         id: "row",
@@ -49,31 +54,40 @@ export default class RichList extends React.Component {
         }
       },{
         Header: "Account",
-        accessor: "account"
+        accessor: "account",
+        Footer: <Count column={column(data, "account")} />,
       }, {
         Header: "Balance",
         accessor: "balance",
+        Footer: <Sum column={column(data, "balance")} />,
       }, {
         Header: "Staked",
-        accessor: "stake"
+        accessor: "stake",
+        Footer: <Sum column={column(data, "stake")} />,
       }, {
         Header: "Pending Unstake",
-        accessor: "pendingUnstake"
+        accessor: "pendingUnstake",
+        Footer: <Sum column={column(data, "pendingUnstake")} />,
       }, {
         Header: "Delegation In",
-        accessor: "delegationsIn"
+        accessor: "delegationsIn",
+        Footer: <Sum column={column(data, "delegationsIn")} />,
       }, {
         Header: "Delegations Out",
-        accessor: "delegationsOut"
+        accessor: "delegationsOut",
+        Footer: <Sum column={column(data, "delegationsOut")} />,
       },  {
         Header: "Effective Stake",
-        accessor: "effectiveStake"
+        accessor: "effectiveStake",
+        Footer: <Sum column={column(data, "effectiveStake")} />,
       }, {
         Header: "Balance + Staked",
-        accessor: "totalAsset"
+        accessor: "totalAsset",
+        Footer: <Sum column={column(data, "totalAsset")} />,
       }, {
         Header: "Total Holding",
         accessor: "totalHolding",
+        Footer: <Sum column={column(data, "totalHolding")} />,
         // Filter: NumberRangeColumnFilter,
         // filter: 'between'
       }];
