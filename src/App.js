@@ -58,11 +58,11 @@ const OpenOrder = ({token, account}) => {
     { account
         ? <Row>
             <Col>
-              <h3>@{account}'s Buying</h3>
+              <h3>@{account} Buying Orders</h3>
               <TradeTable token={token} account={account} table="buyBook" index="timestamp" descending={true} />
             </Col>
             <Col>
-              <h3>@{account}'s Selling</h3>
+              <h3>@{account} Selling Orders</h3>
               <TradeTable token={token} account={account} table="sellBook" index="timestamp" descending={true} />
             </Col>
           </Row>
