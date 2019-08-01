@@ -36,16 +36,16 @@ export default class TradeTable extends React.Component {
   }
 
   columns() {
-    const { token, table } = this.props;
+    const { token, account, table } = this.props;
 
     const buy_order_columns = [{
       Header: "Date",
       accessor: "timestamp"
     }, {
-      Header: 'Account',
-      accessor: 'account'
+      Header: account ? 'Token' : 'Account',
+      accessor: account ? 'symbol' : 'account'
     }, {
-      Header: `${token} Amount`,
+      Header: account ? 'Amount' : `${token} Amount`,
       accessor: 'quantity'
     }, {
       Header: "Steem Amount",
@@ -62,11 +62,11 @@ export default class TradeTable extends React.Component {
       Header: "Steem Amount",
       accessor: 'volume'
     }, {
-      Header: `${token} Amount`,
+      Header: account ? 'Amount' : `${token} Amount`,
       accessor: 'quantity'
     }, {
-      Header: 'Account',
-      accessor: 'account'
+      Header: account ? 'Token' : 'Account',
+      accessor: account ? 'symbol' : 'account'
     }, {
       Header: "Date",
       accessor: "timestamp"
@@ -100,8 +100,13 @@ export default class TradeTable extends React.Component {
   }
 
   fetchData() {
-    const { token, table, index, descending } = this.props;
+    const { token, account, table, index, descending } = this.props;
     const contract = "market";
+    const query = {}
+    if (token)
+      query['symbol'] = token;
+    if (account)
+      query['account'] = account;
 
     // fetch your data
     axios.post(url, {
@@ -111,7 +116,7 @@ export default class TradeTable extends React.Component {
       "params": {
         "contract": contract,
         "table": table,
-        "query": { "symbol": token },
+        "query": query,
         "limit": 500,
         "offset": 0,
         "indexes":[{"index":index, "descending": descending}]
