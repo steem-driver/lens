@@ -3,7 +3,7 @@ import { sum } from 'lodash';
 
 
 export const Sum = ({column}) => {
-  const value = sum(column);
+  const value = sum(column).toFixed(3);
   return <span title={value}>
     <strong>Sum:</strong>{" "}
     { value }

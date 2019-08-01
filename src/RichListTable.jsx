@@ -7,7 +7,8 @@ import { Sum, Count } from './Footer'
 
 const url = "https://api.steem-engine.com/rpc/contracts";
 
-const column = (data, index) => data.map(row => row[index])
+const column = (data, index) => data.map(row => row[index]);
+const number = props => <span>{props.value.toFixed(3)}</span>;
 
 export default class RichList extends React.Component {
 
@@ -79,14 +80,17 @@ export default class RichList extends React.Component {
       },  {
         Header: "Effective Stake",
         accessor: "effectiveStake",
+        Cell: number,
         Footer: <Sum column={column(data, "effectiveStake")} />,
       }, {
         Header: "Balance + Staked",
         accessor: "totalAsset",
+        Cell: number,
         Footer: <Sum column={column(data, "totalAsset")} />,
       }, {
         Header: "Total Holding",
         accessor: "totalHolding",
+        Cell: number,
         Footer: <Sum column={column(data, "totalHolding")} />,
         // Filter: NumberRangeColumnFilter,
         // filter: 'between'
@@ -119,7 +123,7 @@ export default class RichList extends React.Component {
             this.fetchData(offset + limit);
 
             const result = res.data.result.map(tx => {
-              for (let key of ["balance", "stake", "pendingUnstake", "delegationsIn", "delegationsOut"]) {
+              for (let key of ["balance", "stake", "pendingUnstake", "delegationsIn", "delegationsOut", "receivedStake", "delegatedStake"]) {
                 if (typeof tx[key] !== typeof undefined && tx[key] != null) {
                   tx[key] = Number(tx[key])
                 } else {
@@ -128,9 +132,9 @@ export default class RichList extends React.Component {
               }
               tx['delegationsIn'] = tx['delegationsIn'] || tx['receivedStake'] || 0;
               tx['delegationsOut'] = tx['delegationsOut'] || tx['delegatedStake'] || 0;
-              tx['effectiveStake'] = Number(tx['stake']) + Number(tx['delegationsIn']);
-              tx['totalAsset'] = Number(tx['balance']) + Number(tx['stake']);
-              tx['totalHolding'] = tx['totalAsset'] + tx['delegationsIn']
+              tx['effectiveStake'] = tx['stake'] + tx['delegationsIn'];
+              tx['totalAsset'] = tx['balance'] + tx['stake'];
+              tx['totalHolding'] = tx['totalAsset'] + tx['delegationsIn'];
 
               return tx;
             }).filter(tx => tx['totalHolding'] > 0) // filter out that holds no token
