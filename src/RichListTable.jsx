@@ -20,14 +20,23 @@ export default class RichList extends React.Component {
       pages: -1,
       loading: true
     }
+    this.data = [];
   }
 
   render() {
+    const { index, descending } = this.props;
+
     return <ReactTable
       className="-highlight -striped"
       columns={this.columns()}
       data={this.state.data} // should default to []
       pageSize={100}
+      defaultSorted={[
+        {
+          id: index,
+          desc: descending
+        }
+      ]}
       // filterable={true}
       loading={this.state.loading}
       // manual // informs React Table that you'll be handling sorting and pagination server-side
@@ -98,7 +107,7 @@ export default class RichList extends React.Component {
   }
 
   fetchData(offset) {
-    const { token, index, descending } = this.props;
+    const { token } = this.props;
     const contract = "tokens";
     const table = "balances";
     const limit = 1000;
@@ -139,14 +148,11 @@ export default class RichList extends React.Component {
               return tx;
             }).filter(tx => tx['totalHolding'] > 0) // filter out that holds no token
 
-            // sort by index column
-            const order = descending ? -1 : 1;
-            let data = this.state.data.concat(result);
-            data.sort((a, b) => ((a[index] - b[index]) * order));
-
+            this.data = this.data.concat(result);
+          } else {
             // update table
             this.setState({
-              data: data,
+              data: this.data,
               loading: false
             });
           }

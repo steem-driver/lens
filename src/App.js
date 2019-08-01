@@ -67,12 +67,12 @@ const TradeHistory = ({token}) => {
   return ( <Container>
     <Row>
       <Col>
-        <h3>{token} Trade History</h3>
+        <h3>{token} Trade History in 24 Hours</h3>
         <TradeTable token={token} table="tradesHistory" index="timestamp" descending={false} />
         <br /> <br />
       </Col>
       <Col>
-        <h3>{token} Trade History with Buyers and Sellers</h3>
+        <h3>{token} Whole Trade History with Buyers and Sellers</h3>
         <TradeHistoryTable token={token} index="timestamp" descending={false}/>
       </Col>
     </Row>
