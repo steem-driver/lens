@@ -2,6 +2,7 @@ import React from "react";
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+// import { NumberRangeColumnFilter } from './Filter'
 
 const url = "https://api.steem-engine.com/rpc/contracts";
 
@@ -23,6 +24,7 @@ export default class RichList extends React.Component {
       columns={this.columns()}
       data={this.state.data} // should default to []
       pageSize={100}
+      // filterable={true}
       loading={this.state.loading}
       // manual // informs React Table that you'll be handling sorting and pagination server-side
       onFetchData={(state, instance) => {
@@ -71,7 +73,9 @@ export default class RichList extends React.Component {
         accessor: "totalAsset"
       }, {
         Header: "Total Holding",
-        accessor: "totalHolding"
+        accessor: "totalHolding",
+        // Filter: NumberRangeColumnFilter,
+        // filter: 'between'
       }];
   }
 
@@ -115,7 +119,9 @@ export default class RichList extends React.Component {
               tx['totalHolding'] = tx['totalAsset'] + tx['delegationsIn']
 
               return tx;
-            })
+            }).filter(tx => tx['totalHolding'] > 0) // filter out that holds no token
+
+            // sort by index column
             const order = descending ? -1 : 1;
             let data = this.state.data.concat(result);
             data.sort((a, b) => ((a[index] - b[index]) * order));
