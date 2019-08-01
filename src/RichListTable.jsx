@@ -69,6 +69,9 @@ export default class RichList extends React.Component {
       }, {
         Header: "Balance + Staked",
         accessor: "totalAsset"
+      }, {
+        Header: "Total Holding",
+        accessor: "totalHolding"
       }];
   }
 
@@ -99,13 +102,18 @@ export default class RichList extends React.Component {
 
             const result = res.data.result.map(tx => {
               for (let key of ["balance", "stake", "pendingUnstake", "delegationsIn", "delegationsOut"]) {
-                if (typeof tx[key] !== typeof undefined && tx[key] != null)
+                if (typeof tx[key] !== typeof undefined && tx[key] != null) {
                   tx[key] = Number(tx[key])
+                } else {
+                  tx[key] = 0
+                }
               }
               tx['delegationsIn'] = tx['delegationsIn'] || tx['receivedStake'] || 0;
               tx['delegationsOut'] = tx['delegationsOut'] || tx['delegatedStake'] || 0;
               tx['effectiveStake'] = Number(tx['stake']) + Number(tx['delegationsIn']);
               tx['totalAsset'] = Number(tx['balance']) + Number(tx['stake']);
+              tx['totalHolding'] = tx['totalAsset'] + tx['delegationsIn']
+
               return tx;
             })
             const order = descending ? -1 : 1;
