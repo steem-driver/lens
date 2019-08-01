@@ -146,7 +146,7 @@ export default class RichList extends React.Component {
               tx['totalHolding'] = tx['totalAsset'] + tx['delegationsIn'];
 
               return tx;
-            }).filter(tx => tx['totalHolding'] > 0) // filter out that holds no token
+            }).filter(tx => tx['totalHolding'] + tx['delegationsOut'] + tx['pendingUnstake'] > 0) // filter out that holds no token
 
             this.data = this.data.concat(result);
           } else {
