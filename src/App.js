@@ -80,17 +80,22 @@ const OpenOrder = ({token, account}) => {
   </Container> );
 }
 
-const TradeHistory = ({token}) => {
+const TradeHistory = ({token, account}) => {
+  const acc = account ? "@" + account : null;
+  const subject = [acc, token].filter(s => !!s).join(" ");
+
   return ( <Container>
     <Row>
+      {
+        account ? "" : <Col>
+          <h3>{subject} Trade History in 24 Hours</h3>
+          <TradeTable token={token} account={account} table="tradesHistory" index="timestamp" descending={false} />
+          <br /> <br />
+        </Col>
+      }
       <Col>
-        <h3>{token} Trade History in 24 Hours</h3>
-        <TradeTable token={token} table="tradesHistory" index="timestamp" descending={false} />
-        <br /> <br />
-      </Col>
-      <Col>
-        <h3>{token} Whole Trade History with Buyers and Sellers</h3>
-        <TradeHistoryTable token={token} index="timestamp" descending={false}/>
+        <h3>All {subject} Trade History with Buyers and Sellers</h3>
+        <TradeHistoryTable token={token} account={account} index="timestamp" descending={false}/>
       </Col>
     </Row>
   </Container> );

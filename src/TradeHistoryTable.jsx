@@ -36,9 +36,9 @@ export default class TradeHistoryTable extends React.Component {
   }
 
   columns() {
-    const { token } = this.props;
+    const { token, account } = this.props;
 
-    return [{
+    let history_columns = [{
       Header: 'Type',
       accessor: 'type'
     }, {
@@ -51,7 +51,7 @@ export default class TradeHistoryTable extends React.Component {
       Header: 'Price (Steem)',
       accessor: 'price',
     }, {
-      Header: `${token} Amount`,
+      Header: account ? 'Amount' : `${token} Amount`,
       accessor: 'quantity'
     }, {
       Header: "Steem Amount",
@@ -60,13 +60,27 @@ export default class TradeHistoryTable extends React.Component {
       Header: "Date",
       accessor: "timestamp"
     }];
+
+    if (account) {
+      history_columns.splice(1, 0, {
+        Header: 'Token',
+        accessor: 'symbol'
+      })
+    }
+
+    return history_columns;
   }
 
   fetchData(page) {
-    const { token } = this.props;
+    const { token, account } = this.props;
     const contract = "market";
-    const pageSize = 500;
-    const url = `https://steem-engine.rocks/transactions.json?symbol=${token}&contract=${contract}&per_page=${pageSize}&page=${page}`;
+    const pageSize = 200;
+    let params = '';
+    if (token)
+        params += `&symbol=${token}`
+    if (account)
+        params += `&account=${account}`
+    const url = `https://steem-engine.rocks/transactions.json?contract=${contract}${params}&per_page=${pageSize}&page=${page}`;
 
     // fetch your data
     axios.get(`${cors_proxy}${url}`)
@@ -97,10 +111,14 @@ export default class TradeHistoryTable extends React.Component {
   }
 
   buildRows(tx) {
-    const { token } = this.props;
+    let { token } = this.props;
 
-    if (tx['payload']['symbol'] !== token)
-      return null;
+    if (token) {
+      if (tx['payload']['symbol'] !== token)
+        return null;
+    }
+    else
+      token = tx['payload']['symbol']
     if (tx['action'] !== "buy" && tx['action'] !== "sell")
       return null;
 
@@ -120,6 +138,7 @@ export default class TradeHistoryTable extends React.Component {
 
         const row = {
           type: tx['action'],
+          symbol: token,
           timestamp: new Date(tx['timestamp']).toLocaleString(),
           price: Number(Number(volume / quantity).toFixed(8)),
           quantity: Number(Number(quantity).toFixed(3)),
