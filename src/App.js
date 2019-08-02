@@ -102,10 +102,13 @@ const TradeHistory = ({token, account}) => {
 }
 
 const RichList = ({token, account}) => {
+  const acc = account ? "@" + account : null;
+  const subject = [acc, token].filter(s => !!s).join(" ");
+
   return ( <Container>
     <Row>
       <Col>
-        <h3>{token} Rich List</h3>
+        <h3>{subject} Rich List</h3>
         <RichListTable token={token} account={account} index="effectiveStake" descending={true}/>
       </Col>
     </Row>

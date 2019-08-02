@@ -24,13 +24,14 @@ export default class RichList extends React.Component {
   }
 
   render() {
-    const { index, descending } = this.props;
+    const { index, descending, account } = this.props;
+    const pageSize = account ? 20 : 100;
 
     return <ReactTable
       className="-highlight -striped"
       columns={this.columns()}
       data={this.state.data} // should default to []
-      pageSize={100}
+      pageSize={pageSize}
       defaultSorted={[
         {
           id: index,
