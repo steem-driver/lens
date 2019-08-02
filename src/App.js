@@ -101,12 +101,12 @@ const TradeHistory = ({token, account}) => {
   </Container> );
 }
 
-const RichList = ({token}) => {
+const RichList = ({token, account}) => {
   return ( <Container>
     <Row>
       <Col>
         <h3>{token} Rich List</h3>
-        <RichListTable token={token} index="effectiveStake" descending={true}/>
+        <RichListTable token={token} account={account} index="effectiveStake" descending={true}/>
       </Col>
     </Row>
   </Container> );

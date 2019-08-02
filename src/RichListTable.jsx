@@ -51,6 +51,7 @@ export default class RichList extends React.Component {
   }
 
   columns() {
+    const { account } = this.props;
     const { data } = this.state;
 
     return [{
@@ -63,9 +64,9 @@ export default class RichList extends React.Component {
           return <div>{row.page * row.pageSize + row.viewIndex + 1}</div>;
         }
       },{
-        Header: "Account",
-        accessor: "account",
-        Footer: <Count column={column(data, "account")} />,
+        Header: account ? 'Token' : 'Account',
+        accessor: account ? 'symbol' : 'account',
+        Footer: <Count column={column(data, account ? "symbol" : "account")} />,
       }, {
         Header: "Balance",
         accessor: "balance",
@@ -107,10 +108,15 @@ export default class RichList extends React.Component {
   }
 
   fetchData(offset) {
-    const { token } = this.props;
+    const { token, account } = this.props;
     const contract = "tokens";
     const table = "balances";
     const limit = 1000;
+    const query = {}
+    if (token)
+      query['symbol'] = token;
+    if (account)
+      query['account'] = account;
 
     // fetch your data
     axios.post(url, {
@@ -120,7 +126,7 @@ export default class RichList extends React.Component {
       "params": {
         "contract": contract,
         "table": table,
-        "query": { "symbol": token },
+        "query": query,
         "limit": limit,
         "offset": offset,
         // "indexes":[{"index":index, "descending": descending}]
