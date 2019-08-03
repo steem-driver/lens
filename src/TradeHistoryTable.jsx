@@ -77,9 +77,9 @@ export default class TradeHistoryTable extends React.Component {
     const pageSize = 200;
     let params = '';
     if (token)
-        params += `&symbol=${token}`
+      params += `&symbol=${token}`
     if (account)
-        params += `&account=${account}`
+      params += `&account=${account}`
     const url = `https://steem-engine.rocks/transactions.json?contract=${contract}${params}&per_page=${pageSize}&page=${page}`;
 
     // fetch your data
@@ -111,7 +111,7 @@ export default class TradeHistoryTable extends React.Component {
   }
 
   buildRows(tx) {
-    let { token } = this.props;
+    let { token, account } = this.props;
 
     if (token) {
       if (tx['payload']['symbol'] !== token)
@@ -135,6 +135,11 @@ export default class TradeHistoryTable extends React.Component {
         // console.log("transaction", transactions[index], transactions[index+1]);
         const sender = tx['sender'];
         const { receiver, quantity, volume } = this.getTradeInfo(sender, token, [transactions[index], transactions[index+1]]);
+
+        if (account) {
+          if (account !== sender && account !== receiver)
+            continue;
+        }
 
         const row = {
           type: tx['action'],
