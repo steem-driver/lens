@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap';
 import TradeTable from './TradeTable';
 import TradeHistoryTable from './TradeHistoryTable';
+import TradeHistoryTableNew from './TradeHistoryTableNew';
 import RichListTable from './RichListTable';
 import TransferTable from './TransferTable';
 import DelegationTable from './DelegationTable';
@@ -14,12 +15,12 @@ const App = ({ location }) => {
   const params = new URLSearchParams(location.search);
   const account = params.get("account")
   const token = params.get("token") || (account ? "" : "ENG");
-  const page = params.get("page") || "open_order";
+  const page = params.get("page") || "rich_list";
 
   const selectBody = () => {
     switch(page) {
-      case "open_order": return OpenOrder;
-      case "trade_history": return TradeHistory;
+      case "order": return Orders;
+      case "trade": return TradeHistory;
       case "rich_list": return RichList;
       case "transfer": return Transfers;
       case "delegation": return Delegations;
@@ -47,8 +48,8 @@ const App = ({ location }) => {
         </Navbar.Brand>
         <Nav className="mr-auto">
           <Link className="nav-link" to={`/${APP_NAME}?page=rich_list${url_params}`}>Rich List</Link>
-          <Link className="nav-link" to={`/${APP_NAME}?page=open_order${url_params}`}>Open Orders</Link>
-          <Link className="nav-link" to={`/${APP_NAME}?page=trade_history${url_params}`}>Trade History</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=order${url_params}`}>Orders</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=trade${url_params}`}>Trade History</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=transfer${url_params}`}>Transfers</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=delegation${url_params}`}>Delegations</Link>
         </Nav>
@@ -75,19 +76,32 @@ const RichList = ({token, account}) => {
   </Container> );
 }
 
-const OpenOrder = ({token, account}) => {
+const Orders = ({token, account}) => {
   return ( <Container>
     { account
-        ? <Row>
-            <Col>
-              <h3>@{account} Buying Orders</h3>
-              <TradeTable token={token} account={account} table="buyBook" index="timestamp" descending={true} />
-            </Col>
-            <Col>
-              <h3>@{account} Selling Orders</h3>
-              <TradeTable token={token} account={account} table="sellBook" index="timestamp" descending={true} />
-            </Col>
-          </Row>
+        ? <div>
+            <Row>
+              <Col>
+                <h3>@{account} Open Buying Orders</h3>
+                <TradeTable token={token} account={account} table="buyBook" index="timestamp" descending={true} />
+              </Col>
+              <Col>
+                <h3>@{account} Open Selling Orders</h3>
+                <TradeTable token={token} account={account} table="sellBook" index="timestamp" descending={true} />
+              </Col>
+            </Row>
+            <hr />
+            <Row>
+              <Col>
+                <h3>@{account} Buying Orders History</h3>
+                <TradeHistoryTableNew token={token} account={account} table="order" type="buy" index="timestamp" descending={true} />
+              </Col>
+              <Col>
+                <h3>@{account} Selling Orders History</h3>
+                <TradeHistoryTableNew token={token} account={account} table="order" type="sell" index="timestamp" descending={true} />
+              </Col>
+            </Row>
+          </div>
         : <Row>
             <Col>
               <h3>People Buying {token}</h3>
@@ -107,19 +121,37 @@ const TradeHistory = ({token, account}) => {
   const subject = [acc, token].filter(s => !!s).join(" ");
 
   return ( <Container>
-    <Row>
-      {
-        account ? "" : <Col>
-          <h3>{subject} Trade History in 24 Hours</h3>
-          <TradeTable token={token} account={account} table="tradesHistory" index="timestamp" descending={false} />
-          <br /> <br />
-        </Col>
-      }
-      <Col>
-        <h3>All {subject} Trade History with Buyers and Sellers</h3>
-        <TradeHistoryTable token={token} account={account} index="timestamp" descending={false}/>
-      </Col>
-    </Row>
+    {
+      account ? <div>
+          <Row>
+            <Col>
+              <h3>{subject} Sell Trade History</h3>
+              <TradeHistoryTableNew token={token} account={account} table="trade" type="sell" index="timestamp" descending={false}/>
+            </Col>
+          </Row>
+          <hr />
+          <Row>
+            <Col>
+              <h3>{subject} Buy Trade History</h3>
+              <TradeHistoryTableNew token={token} account={account} table="trade" type="buy" index="timestamp" descending={false}/>
+            </Col>
+          </Row>
+        </div>
+        : <Row>
+            <Col>
+              <h3>{subject} Trade History in 24 Hours</h3>
+              <TradeTable token={token} account={account} table="tradesHistory" index="timestamp" descending={false} />
+              <br /> <br />
+            </Col>
+            <Col>
+              <h3>All {subject} Trade History</h3>
+              {
+                <TradeHistoryTable token={token} account={account} index="timestamp" descending={false}/>
+              }
+
+            </Col>
+          </Row>
+    }
   </Container> );
 }
 
