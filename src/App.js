@@ -32,6 +32,7 @@ const App = ({ location }) => {
   url_params += (account ? `&account=${account}` : '');
   url_params += (token ? `&token=${token}` : '');
 
+  const rich_list_tab = account ? "Token Summary" : "Rich List";
 
   return (
     <div>
@@ -47,7 +48,7 @@ const App = ({ location }) => {
           {' Lens' }
         </Navbar.Brand>
         <Nav className="mr-auto">
-          <Link className="nav-link" to={`/${APP_NAME}?page=rich_list${url_params}`}>Rich List</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=rich_list${url_params}`}>{rich_list_tab}</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=order${url_params}`}>Orders</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=trade${url_params}`}>Trade History</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=transfer${url_params}`}>Transfers</Link>
