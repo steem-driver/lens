@@ -5,6 +5,7 @@ import TradeTable from './TradeTable';
 import TradeHistoryTable from './TradeHistoryTable';
 import RichListTable from './RichListTable';
 import TransferTable from './TransferTable';
+import DelegationTable from './DelegationTable';
 
 const APP_NAME = "lens";
 
@@ -20,6 +21,7 @@ const App = ({ location }) => {
       case "trade_history": return TradeHistory;
       case "rich_list": return RichList;
       case "transfer": return Transfers;
+      case "delegation": return Delegations;
       default: return null;
     }
   };
@@ -47,6 +49,7 @@ const App = ({ location }) => {
           <Link className="nav-link" to={`/${APP_NAME}?page=open_order${url_params}`}>Open Orders</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=trade_history${url_params}`}>Trade History</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=transfer${url_params}`}>Transfers</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=delegation${url_params}`}>Delegations</Link>
         </Nav>
       </Navbar>
       <br />
@@ -134,6 +137,29 @@ const Transfers = ({token, account}) => {
               <Col>
                 <h3>@{account} Transfers Out</h3>
                 <TransferTable token={token} account={account} type="from" index="timestamp" descending={true} />
+              </Col>
+            </Row>
+          </div>
+        : <div />
+    }
+  </Container> );
+}
+
+const Delegations = ({token, account}) => {
+  return ( <Container>
+    { account
+        ? <div>
+            <Row>
+              <Col>
+                <h3>@{account} Delegations In</h3>
+                <DelegationTable token={token} account={account} type="to" index="timestamp" descending={true} />
+              </Col>
+            </Row>
+            <hr />
+            <Row>
+              <Col>
+                <h3>@{account} Delegations Out</h3>
+                <DelegationTable token={token} account={account} type="from" index="timestamp" descending={true} />
               </Col>
             </Row>
           </div>

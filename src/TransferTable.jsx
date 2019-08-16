@@ -51,7 +51,7 @@ export default class TransferTable extends React.Component {
     }, {
       Header: account ? 'Amount' : `${token} Amount`,
       accessor: 'quantity'
-    },  {
+    }, {
       Header: 'Memo',
       accessor: 'memo',
       Cell: text
@@ -70,7 +70,7 @@ export default class TransferTable extends React.Component {
     }, {
       Header: account ? 'Amount' : `${token} Amount`,
       accessor: 'quantity'
-    },  {
+    }, {
       Header: 'Memo',
       accessor: 'memo',
       Cell: text
@@ -101,7 +101,6 @@ export default class TransferTable extends React.Component {
     // fetch your data
     axios.get(url)
       .then((res) => {
-        console.log("res", res);
         if (res && res.data && res.data.length > 0) {
           this.fetchData(offset+limit);
           const rows = res.data.filter(tx => {
@@ -121,8 +120,6 @@ export default class TransferTable extends React.Component {
             }
             return tx;
           })
-
-          console.log("rows", rows);
 
           const data = this.state.data.concat(rows);
           // update table
