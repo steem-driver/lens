@@ -122,16 +122,21 @@ const TradeHistory = ({token, account}) => {
 const Transfers = ({token, account}) => {
   return ( <Container>
     { account
-        ? <Row>
-            <Col>
-              <h3>@{account} Transfers In</h3>
-              <TransferTable token={token} account={account} type="to" index="timestamp" descending={true} />
-            </Col>
-            <Col>
-              <h3>@{account} Transfers Out</h3>
-              <TransferTable token={token} account={account} type="from" index="timestamp" descending={true} />
-            </Col>
-          </Row>
+        ? <div>
+            <Row>
+              <Col>
+                <h3>@{account} Transfers In</h3>
+                <TransferTable token={token} account={account} type="to" index="timestamp" descending={true} />
+              </Col>
+            </Row>
+            <hr />
+            <Row>
+              <Col>
+                <h3>@{account} Transfers Out</h3>
+                <TransferTable token={token} account={account} type="from" index="timestamp" descending={true} />
+              </Col>
+            </Row>
+          </div>
         : <div />
     }
   </Container> );
