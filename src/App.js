@@ -4,6 +4,7 @@ import { Navbar, Nav, Container, Row, Col } from 'react-bootstrap';
 import TradeTable from './TradeTable';
 import TradeHistoryTable from './TradeHistoryTable';
 import RichListTable from './RichListTable';
+import TransferTable from './TransferTable';
 
 const APP_NAME = "lens";
 
@@ -18,6 +19,7 @@ const App = ({ location }) => {
       case "open_order": return OpenOrder;
       case "trade_history": return TradeHistory;
       case "rich_list": return RichList;
+      case "transfer": return Transfers;
       default: return null;
     }
   };
@@ -41,9 +43,10 @@ const App = ({ location }) => {
           {' Lens' }
         </Navbar.Brand>
         <Nav className="mr-auto">
+          <Link className="nav-link" to={`/${APP_NAME}?page=rich_list${url_params}`}>Rich List</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=open_order${url_params}`}>Open Orders</Link>
           <Link className="nav-link" to={`/${APP_NAME}?page=trade_history${url_params}`}>Trade History</Link>
-          <Link className="nav-link" to={`/${APP_NAME}?page=rich_list${url_params}`}>Rich List</Link>
+          <Link className="nav-link" to={`/${APP_NAME}?page=transfer${url_params}`}>Transfers</Link>
         </Nav>
       </Navbar>
       <br />
@@ -51,6 +54,21 @@ const App = ({ location }) => {
       <Body token={token} account={account} />
     </div>
   );
+}
+
+const RichList = ({token, account}) => {
+  const acc = account ? "@" + account : null;
+  let subject = [acc, token].filter(s => !!s).join(" ");
+  subject += account ? " Token Summary" : " Rich List";
+
+  return ( <Container>
+    <Row>
+      <Col>
+        <h3>{subject}</h3>
+        <RichListTable token={token} account={account} index="effectiveStake" descending={true}/>
+      </Col>
+    </Row>
+  </Container> );
 }
 
 const OpenOrder = ({token, account}) => {
@@ -101,21 +119,23 @@ const TradeHistory = ({token, account}) => {
   </Container> );
 }
 
-const RichList = ({token, account}) => {
-  const acc = account ? "@" + account : null;
-  let subject = [acc, token].filter(s => !!s).join(" ");
-  subject += account ? " Token Summary" : " Rich List";
-
+const Transfers = ({token, account}) => {
   return ( <Container>
-    <Row>
-      <Col>
-        <h3>{subject}</h3>
-        <RichListTable token={token} account={account} index="effectiveStake" descending={true}/>
-      </Col>
-    </Row>
+    { account
+        ? <Row>
+            <Col>
+              <h3>@{account} Transfers In</h3>
+              <TransferTable token={token} account={account} type="to" index="timestamp" descending={true} />
+            </Col>
+            <Col>
+              <h3>@{account} Transfers Out</h3>
+              <TransferTable token={token} account={account} type="from" index="timestamp" descending={true} />
+            </Col>
+          </Row>
+        : <div />
+    }
   </Container> );
 }
-
 
 function AppRouter() {
   return (
