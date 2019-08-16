@@ -2,8 +2,10 @@ import React from "react";
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { Sum } from './Footer'
 
 const text = props => <span title={props.value}>{props.value}</span>;
+const column = (data, index) => data.map(row => row[index]);
 
 export default class TradeHistoryTableNew extends React.Component {
 
@@ -37,6 +39,7 @@ export default class TradeHistoryTableNew extends React.Component {
 
   columns() {
     const { token, account, table, type } = this.props;
+    const { data } = this.state;
 
     const buy_order_columns = [{
       Header: "Date",
@@ -85,10 +88,12 @@ export default class TradeHistoryTableNew extends React.Component {
       accessor: 'price',
     }, {
       Header: account ? 'Amount' : `${token} Amount`,
-      accessor: 'quantity'
+      accessor: 'quantity',
+      Footer: token ? <Sum column={column(data, "quantity")} /> : null
     }, {
       Header: "Steem Amount",
-      accessor: 'volume'
+      accessor: 'volume',
+      Footer: <Sum column={column(data, "volume")} />
     }, {
       Header: "Date",
       accessor: "timestamp",
