@@ -153,9 +153,11 @@ export default class TradeHistoryTableNew extends React.Component {
             this.fetchData(offset+limit);
             const rows = res.data.filter(tx => {
               if (tx['operation'] === operation) {
-                if (tx['operation'] === "market_placeOrder" && tx['orderType'] === type)
-                  return true;
-                else
+                if (tx['operation'] === "market_placeOrder") {
+                  if (tx['orderType'] === type) {
+                    return true;
+                  }
+                } else
                   return true;
               }
               return false;
