@@ -2,47 +2,16 @@ import React from "react";
 import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import DelegationTable from './DelegationTable';
 
 const text = props => <span title={props.value}>{props.value}</span>;
 
-export default class TransferTable extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      columns: [],
-      data: [],
-      pages: -1,
-      loading: true
-    }
-  }
-
-  render() {
-    return <ReactTable
-      className="-highlight -striped"
-      columns={this.columns()}
-      data={this.state.data} // should default to []
-      pageSize={20}
-      loading={this.state.loading}
-      // manual // informs React Table that you'll be handling sorting and pagination server-side
-      onFetchData={(state, instance) => {
-        if (state.data.length === 0) {
-          // show the loading overlay
-          this.setState({loading: true});
-          this.fetchData(0);
-        }
-      }}
-    />
-  }
+export default class DelegationHistoryTable extends DelegationTable {
 
   columns() {
     const { token, account, type } = this.props;
 
-    const transfers_in_columns = [{
-      Header: "Date",
-      accessor: "timestamp",
-      Cell: text
-    }, {
+    const delegation_in_columns = [{
       Header: account ? 'Token' : 'Account',
       accessor: account ? 'symbol' : 'account'
     }, {
@@ -52,16 +21,12 @@ export default class TransferTable extends React.Component {
       Header: account ? 'Amount' : `${token} Amount`,
       accessor: 'quantity'
     }, {
-      Header: 'Memo',
-      accessor: 'memo',
-      Cell: text
-    }];
-
-    const transfers_out_columns = [{
       Header: "Date",
       accessor: "timestamp",
       Cell: text
-    }, {
+    }];
+
+    const delegation_out_columns = [{
       Header: account ? 'Token' : 'Account',
       accessor: account ? 'symbol' : 'account'
     }, {
@@ -71,15 +36,15 @@ export default class TransferTable extends React.Component {
       Header: account ? 'Amount' : `${token} Amount`,
       accessor: 'quantity'
     }, {
-      Header: 'Memo',
-      accessor: 'memo',
+      Header: "Date",
+      accessor: "timestamp",
       Cell: text
     }];
 
     if (type === "to")
-      return transfers_in_columns;
+      return delegation_in_columns;
     else if (type === "from")
-      return transfers_out_columns;
+      return delegation_out_columns;
     else
       return null;
   }
@@ -105,7 +70,7 @@ export default class TransferTable extends React.Component {
           if (res.data.length > 0) {
             this.fetchData(offset+limit);
             const rows = res.data.filter(tx => {
-              if (tx['operation'] === 'tokens_transfer') {
+              if (tx['operation'] === 'tokens_delegate') {
                 if (account && tx[type] === account)
                   return true;
               }

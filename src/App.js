@@ -6,6 +6,7 @@ import TradeHistoryTable from './TradeHistoryTable';
 import RichListTable from './RichListTable';
 import TransferTable from './TransferTable';
 import DelegationTable from './DelegationTable';
+import DelegationHistoryTable from './DelegationHistoryTable';
 
 const APP_NAME = "lens";
 
@@ -154,12 +155,20 @@ const Delegations = ({token, account}) => {
                 <h3>@{account} Delegations In</h3>
                 <DelegationTable token={token} account={account} type="to" index="timestamp" descending={true} />
               </Col>
+              <Col>
+                <h3>@{account} Delegations Out</h3>
+                <DelegationTable token={token} account={account} type="from" index="timestamp" descending={true} />
+              </Col>
             </Row>
             <hr />
             <Row>
               <Col>
-                <h3>@{account} Delegations Out</h3>
-                <DelegationTable token={token} account={account} type="from" index="timestamp" descending={true} />
+                <h3>@{account} Delegations In History</h3>
+                <DelegationHistoryTable token={token} account={account} type="to" index="timestamp" descending={true} />
+              </Col>
+              <Col>
+                <h3>@{account} Delegations Out History</h3>
+                <DelegationHistoryTable token={token} account={account} type="from" index="timestamp" descending={true} />
               </Col>
             </Row>
           </div>
