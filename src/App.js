@@ -84,11 +84,11 @@ const Orders = ({token, account}) => {
             <Row>
               <Col>
                 <h3>@{account} Open Buying Orders</h3>
-                <TradeTable token={token} account={account} table="buyBook" index="timestamp" descending={true} />
+                <TradeTable token={token} account={account} table="buyBook" index="_id" descending={true} />
               </Col>
               <Col>
                 <h3>@{account} Open Selling Orders</h3>
-                <TradeTable token={token} account={account} table="sellBook" index="timestamp" descending={true} />
+                <TradeTable token={token} account={account} table="sellBook" index="_id" descending={true} />
               </Col>
             </Row>
             <hr />
@@ -106,11 +106,11 @@ const Orders = ({token, account}) => {
         : <Row>
             <Col>
               <h3>People Buying {token}</h3>
-              <TradeTable token={token} table="buyBook" index="price" descending={true} />
+              <TradeTable token={token} table="buyBook" index="priceDec" descending={true} />
             </Col>
             <Col>
               <h3>People Selling {token}</h3>
-              <TradeTable token={token} table="sellBook" index="price" descending={false} />
+              <TradeTable token={token} table="sellBook" index="priceDec" descending={false} />
             </Col>
           </Row>
     }
@@ -141,7 +141,7 @@ const TradeHistory = ({token, account}) => {
         : <Row>
             <Col>
               <h3>{subject} Trade History in 24 Hours</h3>
-              <TradeTable token={token} account={account} table="tradesHistory" index="timestamp" descending={false} />
+              <TradeTable token={token} account={account} table="tradesHistory" index="_id" descending={true} />
               <br /> <br />
             </Col>
             <Col>
@@ -186,11 +186,11 @@ const Delegations = ({token, account}) => {
             <Row>
               <Col>
                 <h3>@{account} Delegations In</h3>
-                <DelegationTable token={token} account={account} type="to" index="timestamp" descending={true} />
+                <DelegationTable token={token} account={account} type="to" index="_id" descending={true} />
               </Col>
               <Col>
                 <h3>@{account} Delegations Out</h3>
-                <DelegationTable token={token} account={account} type="from" index="timestamp" descending={true} />
+                <DelegationTable token={token} account={account} type="from" index="_id" descending={true} />
               </Col>
             </Row>
             <hr />
