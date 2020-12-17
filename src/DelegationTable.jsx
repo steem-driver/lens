@@ -3,7 +3,7 @@ import axios from 'axios';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 
-const url = "https://api.steem-engine.com/rpc2/contracts";
+const url = "https://api.steem-engine.net/rpc2/contracts";
 const text = props => <span title={props.value}>{props.value}</span>;
 
 export default class TradeTable extends React.Component {

@@ -5,7 +5,7 @@ import 'react-table/react-table.css';
 // import { NumberRangeColumnFilter } from './Filter'
 import { Sum, Count } from './Footer'
 
-const url = "https://api.steem-engine.com/rpc/contracts";
+const url = "https://api.steem-engine.net/rpc/contracts";
 
 const column = (data, index) => data.map(row => row[index]);
 const number = props => <span>{props.value.toFixed(3)}</span>;

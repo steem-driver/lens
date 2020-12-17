@@ -59,7 +59,7 @@ export default class DelegationHistoryTable extends DelegationTable {
       params += `&symbol=${token}`
     if (account)
       params += `&account=${account}`
-    const url = `https://api.steem-engine.com/history/accountHistory?offset=${offset}&limit=${limit}${params}`;
+    const url = `https://api.steem-engine.net/history/accountHistory?offset=${offset}&limit=${limit}${params}`;
 
     // fetch your data
     axios.get(url)
